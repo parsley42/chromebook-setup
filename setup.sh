@@ -30,10 +30,25 @@ prompt_upgrade() {
   return 1
 }
 
-if ! which unzip > /dev/null
-then
+# List of standard packages to ensure are installed
+PACKAGES=(
+  "make"
+  "zip"
+  "unzip"
+  "jq"
+)
+
+PACKAGES_TO_INSTALL=()
+for pkg in "${PACKAGES[@]}"; do
+  if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+    PACKAGES_TO_INSTALL+=("$pkg")
+  fi
+done
+
+if [ ${#PACKAGES_TO_INSTALL[@]} -gt 0 ]; then
+  echo "Installing missing packages: ${PACKAGES_TO_INSTALL[*]}"
   sudo apt update
-  sudo apt install -y unzip
+  sudo apt install -y "${PACKAGES_TO_INSTALL[@]}"
 fi
 
 
