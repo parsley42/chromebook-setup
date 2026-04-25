@@ -1,0 +1,25 @@
+source $HOME/.git-completion.bash
+source $HOME/.git-prompt.sh
+
+export GIT_PS1_SHOWUPSTREAM="auto"
+export GIT_PS1_SHOWDIRTYSTATE="true"
+export GIT_PS1_SHOWSTASHSTATE="true"
+export GIT_PS1_SHOWUNTRACKEDFILES="true"
+PS1='[\[\033[01;32m\]\u@\h:\w\[\033[01;34m\]$(__git_ps1 "(%s)")\[\033[00m\]]\$ \[\]\[\]'
+
+# Add Go to PATH
+if ! echo "$PATH" | grep -q "/usr/local/go/bin"; then
+  export PATH=$PATH:/usr/local/go/bin
+fi
+
+# Initialize fnm
+if which fnm > /dev/null; then
+  eval "$(fnm env --use-on-cd)"
+fi
+
+# Fix Wayland rendering bug for Electron apps
+alias code="code --disable-features=WaylandFractionalScaleV1"
+alias antigravity="antigravity --disable-features=WaylandFractionalScaleV1"
+
+# Export SSH_AUTH_SOCK for ssh-agent
+export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent.socket
