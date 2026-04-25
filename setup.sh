@@ -35,6 +35,7 @@ prompt_upgrade() {
 # List of standard packages to ensure are installed
 PACKAGES=(
   "make"
+  "gcc"
   "zip"
   "unzip"
   "jq"
