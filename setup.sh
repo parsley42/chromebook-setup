@@ -1,6 +1,8 @@
 #!/bin/bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# Ensure user's bin directory exists
+mkdir -p "$HOME/bin"
 
 prompt_upgrade() {
   local name=$1
@@ -36,6 +38,7 @@ PACKAGES=(
   "zip"
   "unzip"
   "jq"
+  "ripgrep"
 )
 
 PACKAGES_TO_INSTALL=()

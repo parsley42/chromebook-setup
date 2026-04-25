@@ -12,6 +12,11 @@ if ! echo "$PATH" | grep -q "/usr/local/go/bin"; then
   export PATH=$PATH:/usr/local/go/bin
 fi
 
+# Add $HOME/bin to PATH
+if ! echo "$PATH" | grep -q "$HOME/bin"; then
+  export PATH="$HOME/bin:$PATH"
+fi
+
 # Initialize fnm
 if which fnm > /dev/null; then
   eval "$(fnm env --use-on-cd)"
