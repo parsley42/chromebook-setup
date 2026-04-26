@@ -172,14 +172,12 @@ then
 fi
 
 
-if ! grep -q '# MANAGED BY Chromebook bootstrap.sh' $HOME/.bashrc
-then
-        cat <<EOF >> $HOME/.bashrc
+# Clean up old configuration from the bottom of .bashrc
+sed -i '/# MANAGED BY Chromebook/d' $HOME/.bashrc
+sed -i '\|source.*/chromebookrc"|d' $HOME/.bashrc
 
-# MANAGED BY Chromebook bootstrap.sh
-source "$DIR/chromebookrc"
-EOF
-fi
+# Inject chromebookrc at the top of .bashrc so non-interactive shells get PATH updates
+awk -v dir="$DIR" 'NR==1{print; print "\n# MANAGED BY Chromebook setup.sh\nsource \""dir"/chromebookrc\""} NR!=1' $HOME/.bashrc > $HOME/.bashrc.tmp && mv $HOME/.bashrc.tmp $HOME/.bashrc
 
 # Go Installation
 GO_LATEST=$(curl -s "https://go.dev/VERSION?m=text" | head -n1)
@@ -209,7 +207,7 @@ fi
 # Node.js Installation
 # Ensure fnm is available for this script since we just might have installed it
 export PATH=$PATH:/usr/local/bin
-eval "$(fnm env)"
+eval "$(fnm env --shell bash)"
 NODE_LATEST=$(fnm ls-remote | tail -n 1)
 NODE_CURRENT=$(node -v 2>/dev/null || echo "")
 if prompt_upgrade "Node.js" "$NODE_CURRENT" "$NODE_LATEST"; then
